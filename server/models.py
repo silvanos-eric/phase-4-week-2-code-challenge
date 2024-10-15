@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy_serializer import SerializerMixin
 
@@ -11,6 +12,8 @@ class Episode(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime)
     number = db.Column(db.Integer)
+
+    guests = association_proxy('appearances', 'guest')
 
 
 class Appearance(db.Model, SerializerMixin):
@@ -37,6 +40,8 @@ class Appearance(db.Model, SerializerMixin):
                             backref='appearances',
                             cascade='all, delete-orphan')
 
+    serialize_rules = '-episode.appearances', '-guest.appearances'
+
 
 class Guest(db.Model, SerializerMixin):
     __tablename__ = 'guests'
@@ -44,3 +49,5 @@ class Guest(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     occupation = db.Column(db.String)
+
+    episodes = association_proxy('appearances', 'episode')
