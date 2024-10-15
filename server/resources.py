@@ -17,7 +17,7 @@ class Episodes(Resource):
 class EpisodeByID(Resource):
 
     def get(self, id):
-        episode = db.session.get(Episode, 1)
+        episode = db.session.get(Episode, id)
         episode_dict = episode.to_dict(rules=('-appearances.episode', ))
         return episode_dict
 
