@@ -80,26 +80,139 @@ This is a simple Flask-based API that manages episodes, guests, and their appear
 
 ### Running the Application
 
-To start the Flask development server, run (from inside `server` directory):
+To start the Flask development server, run:
 
 ```bash
-python app.py
-```
-
-Alternatively if you prefer using the `Flask CLI`
-
-```bash
-flask run
+python server/app.py
 ```
 
 The API will be available at `http://127.0.0.1:5555`.
 
-### API Endpoints
+### API Endpoints and Example Responses
 
-- **GET /episodes** - Fetch all episodes.
-- **GET /episodes/<id>** - Fetch a specific episode by ID.
-- **POST /appearances** - Create a new appearance.
-- **GET /guests** - Fetch all guests.
+#### **GET /episodes**
+
+Fetch all episodes.
+
+**Request:**
+
+```bash
+curl -X GET http://127.0.0.1:5555/episodes
+```
+
+**Response:**
+
+```json
+[
+    {
+        "id": 1,
+        "date": "10/01/89",
+        "number": 1
+    },
+    {
+        "id": 2,
+        "date": "11/01/89",
+        "number": 2
+    }
+    ...
+]
+```
+
+#### **GET /episodes/&lt;id&gt;**
+
+Fetch a specific episode by ID.
+
+**Request:**
+
+```bash
+curl -X GET http://127.0.0.1:5555/episodes/1
+```
+
+**Response:**
+
+```json
+  {
+    "id": 1,
+    "date": "1/11/99",
+    "number": 1,
+    "appearances": [
+        {
+            "episode_id": 1,
+            "guest": {
+                "id": 1,
+                "name": "Michael J. Fox",
+                "occupation": "actor"
+            },
+            "guest_id": 1,
+            "id": 1,
+            "rating": 4
+        }
+    ]
+}
+```
+
+#### **POST /appearances**
+
+Create a new appearance by submitting JSON data.
+
+**Request:**
+
+```bash
+curl -X POST http://127.0.0.1:5555/appearances \
+-H "Content-Type: application/json" \
+-d '{
+    "rating": 5,
+    "episode_id": 1,
+    "guest_id": 1
+}'
+```
+
+**Response:**
+
+```json
+{
+  "rating": 5,
+  "episode_id": 100,
+  "guest_id": 123
+}
+```
+
+**Error Example (Duplicate Appearance):**
+
+```json
+{
+    "errors": [
+        "Duplicate Appearance. Appearance already exists"
+    ]
+}
+```
+
+#### **GET /guests**
+
+Fetch all guests.
+
+**Request:**
+
+```bash
+curl -X GET http://127.0.0.1:5555/guests
+```
+
+**Response:**
+
+```json
+[
+    {
+        "id": 1,
+        "name": "John Doe",
+        "occupation": "Comedian"
+    },
+    {
+        "id": 2,
+        "name": "Jane Smith",
+        "occupation": "Actor"
+    }
+]
+```
 
 ### Database Migrations
 
