@@ -30,6 +30,13 @@ class Appearance(db.Model, SerializerMixin):
                                       'guest_id',
                                       name='uq_episode_id_guest_id'),
 
+    episode = db.relationship('Episode',
+                              backref='appearances',
+                              cascade='all, delete-orphan')
+    guest = db.relationship('Guest',
+                            backref='appearances',
+                            cascade='all, delete-orphan')
+
 
 class Guest(db.Model, SerializerMixin):
     __tablename__ = 'guests'
