@@ -49,8 +49,8 @@ This is a simple Flask-based API that manages episodes, guests, and their appear
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/silvanos-eric/phase-4-week-2-code-challenge.git
+   cd phase-4-week-2-code-challenge
    ```
 
 2. Install dependencies using Pipenv:
@@ -211,6 +211,7 @@ curl -X GET http://127.0.0.1:5555/guests
         "name": "Jane Smith",
         "occupation": "Actor"
     }
+    ...
 ]
 ```
 
@@ -239,4 +240,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Author
 
-- **Your Name** - _Initial work_
+- **Silvanos Eric** - _Initial work_
