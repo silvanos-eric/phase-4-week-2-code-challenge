@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_restful import Resource
-from models import Episode, db
+from models import Episode, Guest, db
 
 
 class Episodes(Resource):
@@ -37,4 +37,12 @@ class Appearances(Resource):
 
 
 class Guests(Resource):
-    pass
+
+    def get(self):
+        guest_list = Guest.query.all()
+
+        guest_dict_list = [
+            guest.to_dict(rules=('-appearances', )) for guest in guest_list
+        ]
+
+        return guest_dict_list
