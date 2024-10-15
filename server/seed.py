@@ -8,14 +8,24 @@ from models import Appearance, Episode, Guest, db
 
 
 def seed_data():
+    """
+    This function seeds the database with random data. Specifically, it resets the
+    database, creates 50 guests, 100 episodes, and 150 appearances. The appearances
+    are randomly assigned to guests and episodes. The episodes have a sequential
+    number and a date that increments by 1 month starting from Oct 1, 1989.
+
+    The function uses the Faker library to generate fake data. The appearances are
+    stored in a set to ensure that the (episode_id, guest_id) pair is unique. The
+    seed data is then committed to the database.
+
+    :return: None
+    """
     # Initialize faker
     fake = Faker()
-
     print('Reseting database...')
     Appearance.query.delete()
     Guest.query.delete()
     Episode.query.delete()
-
     number_of_guests = 50
     number_of_episodes = 100
     number_of_appearances = 150
