@@ -1,7 +1,8 @@
 import random
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from app import app
+from dateutil.relativedelta import relativedelta
 from faker import Faker
 from models import Appearance, Episode, Guest, db
 
@@ -27,13 +28,14 @@ def seed_data():
     print('Creating episode objects...')
 
     # Start date for the episodes
-    current_year = datetime.now().year
+    start_date = datetime(1989, 10, 1)
     for i in range(1, 10 + 1):
         # Increment the date by 1 month for each episode
-        start_date = datetime(current_year, i, 1)
+        date = start_date + relativedelta(months=i)
+        date_string = date.strftime('%m/%d/%y')
 
         # Create a new episode with the incremented date and sequential number
-        episode = Episode(date=start_date, number=i)
+        episode = Episode(date=date_string, number=i)
         db.session.add(episode)
         db.session.commit()
     print('Successfully seeded episodes.')
