@@ -14,6 +14,14 @@ class Episodes(Resource):
         return episode_dict_list
 
 
+class EpisodeByID(Resource):
+
+    def get(self, id):
+        episode = db.session.get(Episode, 1)
+        episode_dict = episode.to_dict(rules=('-appearances.episode', ))
+        return episode_dict
+
+
 class Appearances(Resource):
     pass
 
