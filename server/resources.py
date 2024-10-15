@@ -18,8 +18,18 @@ class EpisodeByID(Resource):
 
     def get(self, id):
         episode = db.session.get(Episode, id)
-        episode_dict = episode.to_dict(rules=('-appearances.episode', ))
-        return episode_dict
+        errors = []
+
+        try:
+            if not episode:
+                raise ValueError(f'Episode with ID {id} does not exist')
+
+            episode_dict = episode.to_dict(rules=('-appearances.episode', ))
+
+            return episode_dict
+        except ValueError as e:
+            errors.append(str(e))
+            return {'errors': errors}
 
 
 class Appearances(Resource):
