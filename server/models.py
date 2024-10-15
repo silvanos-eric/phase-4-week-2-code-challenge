@@ -36,6 +36,9 @@ class Episode(db.Model, SerializerMixin):
                                   cascade='all, delete-orphan')
     guests = association_proxy('appearances', 'guest')
 
+    def __repr__(self):
+        return f'Episode(date="{self.date}"), number=({self.number})'
+
 
 class Appearance(db.Model, SerializerMixin):
     __tablename__ = 'appearances'
@@ -63,6 +66,9 @@ class Appearance(db.Model, SerializerMixin):
                 'Invalid rating. Rating should be between 1 and 5.')
         return rating
 
+    def __repr__(self):
+        return f'Appearance(rating={self.rating}, episode_id={self.episode_id}, guest_id={self.guest_id})'
+
 
 class Guest(db.Model, SerializerMixin):
     __tablename__ = 'guests'
@@ -75,3 +81,6 @@ class Guest(db.Model, SerializerMixin):
                                   backref='guest',
                                   cascade='all, delete-orphan')
     episodes = association_proxy('appearances', 'episode')
+
+    def __repr__(self):
+        return f'Guest(name="{self.name}", occupation="{self.occupation}")'
