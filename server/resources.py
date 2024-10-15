@@ -32,7 +32,9 @@ class EpisodeByID(Resource):
             return episode_dict
         except ValueError as e:
             errors.append(str(e))
-            return {'errors': errors}
+            return {'errors': errors}, 400
+        except:
+            return {'errors': ['An unknown error occurred']}, 500
 
 
 class Appearances(Resource):
@@ -75,7 +77,9 @@ class Appearances(Resource):
             if 'UNIQUE' in str(e):
                 errors.append(
                     f'Duplicate Appearance. Appearance already exists')
-        return {'errors': errors}
+        except:
+            return {'errors': ['An uknown error occurred']}, 500
+        return {'errors': errors}, 400
 
 
 class Guests(Resource):
