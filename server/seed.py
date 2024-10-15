@@ -16,20 +16,23 @@ def seed_data():
     Guest.query.delete()
     Episode.query.delete()
 
-    print('Creating guest objects...')
+    number_of_guests = 50
+    number_of_episodes = 100
+    number_of_appearances = 150
+
+    print(f'Creating {number_of_guests} guests...')
     for _ in range(50):
         name = fake.unique.name()
         occupation = fake.job()
         guest = Guest(name=name, occupation=occupation)
         db.session.add(guest)
         db.session.commit()
-    print('Successfully seeded guests.')
+    print(f'Successfully seeded {number_of_guests} guests.')
 
-    print('Creating episode objects...')
-
+    print(f'Creating {number_of_episodes} episodes...')
     # Start date for the episodes
     start_date = datetime(1989, 10, 1)
-    for i in range(1, 10 + 1):
+    for i in range(number_of_episodes):
         # Increment the date by 1 month for each episode
         date = start_date + relativedelta(months=i)
         date_string = date.strftime('%m/%d/%y')
@@ -38,15 +41,16 @@ def seed_data():
         episode = Episode(date=date_string, number=i)
         db.session.add(episode)
         db.session.commit()
-    print('Successfully seeded episodes.')
+    print(f'Successfully seeded {number_of_episodes} episodes.')
 
-    print('Creating appearance objects...')
+    print(f'Creating {number_of_appearances} appearances...')
     episodes = Episode.query.all()
     guests = Guest.query.all()
     appearance_set = set()
 
-    while len(appearance_set
-              ) < 100:  # Target is to create a 100 unique appearance records
+    while len(
+            appearance_set
+    ) < number_of_appearances:  # Target is to create a 100 unique appearance records
         episode = random.choice(episodes)
         guest = random.choice(guests)
         rating = random.choice(range(1, 5 + 1))
@@ -63,7 +67,7 @@ def seed_data():
             db.session.add(appearance)
     # Commit the session to insert all the uppearance records
     db.session.commit()
-    print('Successfully seeded appearances.')
+    print(f'Successfully seeded {number_of_appearances} appearances.')
 
 
 if __name__ == '__main__':
