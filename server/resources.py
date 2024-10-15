@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 class Episodes(Resource):
 
     def get(self):
+        """Get all episodes with their episode number and date."""
         episode_list = Episode.query.all()
         episode_dict_list = [
             episode.to_dict(rules=('-appearances', ))
@@ -18,6 +19,7 @@ class Episodes(Resource):
 class EpisodeByID(Resource):
 
     def get(self, id):
+        """Get an episode by ID, with its episode number and date."""
         episode = db.session.get(Episode, id)
         errors = []
 
@@ -36,6 +38,10 @@ class EpisodeByID(Resource):
 class Appearances(Resource):
 
     def post(self):
+        """
+        Create a new appearance from the JSON data in the request body
+        and return the new appearance as JSON.
+        """
         data = request.json
         errors = []
 
@@ -75,6 +81,7 @@ class Appearances(Resource):
 class Guests(Resource):
 
     def get(self):
+        """Get all guests as a list of dictionaries."""
         guest_list = Guest.query.all()
 
         guest_dict_list = [

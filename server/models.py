@@ -12,10 +12,8 @@ db = SQLAlchemy()
 
 
 @event.listens_for(Engine, "connect")
-def _set_sqlite_pragma(dbapi_connection, _):
-    """
-    Enable foreign key constraints on the database connections.
-    """
+def set_sqlite_foreign_keys_on_connect(dbapi_connection, _connection_record):
+    """Enable foreign key constraints on the database connections."""
     if not isinstance(dbapi_connection, Connection):
         return
 
