@@ -57,9 +57,15 @@ class Appearance(db.Model, SerializerMixin):
 
     serialize_rules = '-episode.appearances', '-guest.appearances'
 
-    @validates
+    @validates('rating')
     def validate_rating(self, _, rating):
-        if rating < 1 and rating > 5:
+        """
+        Validate the rating of an Appearance.
+
+        Raises:
+            ValueError: If the rating is not between 1 and 5.
+        """
+        if rating < 1 or rating > 5:
             raise ValueError(
                 'Invalid rating. Rating should be between 1 and 5.')
         return rating
