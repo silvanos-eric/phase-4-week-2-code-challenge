@@ -1,7 +1,7 @@
 from sqlite3 import Connection
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import event, func
+from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
