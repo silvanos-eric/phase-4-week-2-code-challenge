@@ -1,10 +1,26 @@
+from sqlite3 import Connection
+
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+from sqlalchemy import event, func
+from sqlalchemy.engine import Engine
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy_serializer import SerializerMixin
 
 db = SQLAlchemy()
+
+
+@event.listens_for(Engine, "connect")
+def _set_sqlite_pragma(dbapi_connection, _):
+    """
+    Enable foreign key constraints on the database connections.
+    """
+    if not isinstance(dbapi_connection, Connection):
+        return
+
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 
 class Episode(db.Model, SerializerMixin):
@@ -14,6 +30,9 @@ class Episode(db.Model, SerializerMixin):
     date = db.Column(db.DateTime, server_default=func.now())
     number = db.Column(db.Integer)
 
+    appearances = db.relationship('Appearance',
+                                  backref='episode',
+                                  cascade='all, delete-orphan')
     guests = association_proxy('appearances', 'guest')
 
 
@@ -34,13 +53,6 @@ class Appearance(db.Model, SerializerMixin):
                                       'guest_id',
                                       name='uq_episode_id_guest_id'),
 
-    episode = db.relationship('Episode',
-                              backref='appearances',
-                              cascade='all, delete-orphan')
-    guest = db.relationship('Guest',
-                            backref='appearances',
-                            cascade='all, delete-orphan')
-
     serialize_rules = '-episode.appearances', '-guest.appearances'
 
 
@@ -51,4 +63,7 @@ class Guest(db.Model, SerializerMixin):
     name = db.Column(db.String)
     occupation = db.Column(db.String)
 
+    appearances = db.relationship('Appearance',
+                                  backref='guest',
+                                  cascade='all, delete-orphan')
     episodes = association_proxy('appearances', 'episode')
