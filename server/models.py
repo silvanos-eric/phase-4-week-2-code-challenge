@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import event, func
 from sqlalchemy.engine import Engine
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import validates
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy_serializer import SerializerMixin
 
@@ -54,6 +55,13 @@ class Appearance(db.Model, SerializerMixin):
                                       name='uq_episode_id_guest_id'),
 
     serialize_rules = '-episode.appearances', '-guest.appearances'
+
+    @validates
+    def validate_rating(self, _, rating):
+        if rating < 1 and rating > 5:
+            raise ValueError(
+                'Invalid rating. Rating should be between 1 and 5.')
+        return rating
 
 
 class Guest(db.Model, SerializerMixin):
