@@ -32,9 +32,9 @@ class EpisodeByID(Resource):
             return episode_dict
         except ValueError as e:
             errors.append(str(e))
-            return {'errors': errors}, 400
         except:
             return {'errors': ['An unknown error occurred']}, 500
+        return {'errors': errors}, 400
 
 
 class Appearances(Resource):

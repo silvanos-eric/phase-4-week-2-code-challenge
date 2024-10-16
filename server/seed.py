@@ -48,7 +48,7 @@ def seed_data():
         date_string = date.strftime('%m/%d/%y')
 
         # Create a new episode with the incremented date and sequential number
-        episode = Episode(date=date_string, number=i)
+        episode = Episode(date=date_string, number=i + 1)
         db.session.add(episode)
         db.session.commit()
     print(f'Successfully seeded {number_of_episodes} episodes.')
